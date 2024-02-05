@@ -8,7 +8,7 @@ type Props = {
 
 }
 
-export default function Navbar( {}: Props) {
+export default function Navbar( props: Props) {
     const [location, setLocation] = React.useState('Kairouan')
     function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
