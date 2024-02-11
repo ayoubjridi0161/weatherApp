@@ -5,17 +5,18 @@ import { MdMyLocation } from "react-icons/md";
 import { IoLocationSharp } from "react-icons/io5";
 import SearchBox from './SearchBox';
 type Props = {
+    city : String | undefined
 
 }
 
 export default function Navbar( props: Props) {
-    const [location, setLocation] = React.useState('Kairouan')
+    
     function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         console.log('submitted')
     }
     function onchange(e: React.ChangeEvent<HTMLInputElement>) {
-        setLocation(e.target.value)
+        
     }
     const [value, setValue] = React.useState('')
     return (
@@ -29,7 +30,7 @@ export default function Navbar( props: Props) {
             <section className='flex gap-3 items-center'>
             <MdMyLocation className="text-4xl hover:opacity-80 text-gray-400 cursor-pointer"/>
             <IoLocationSharp className="text-4xl"/>
-            <p className='text-slate-900/80 text-sm'>{location}</p>
+            <p className='text-slate-900/80 text-sm'>{props.city}</p>
             <div>{/*search bar*/}
                 <SearchBox  onSubmit={onSubmit} value={value} onChange={onchange}/>
             </div>
