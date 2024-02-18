@@ -5,9 +5,14 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import Container from "@/components/Container";
 import { convert } from "@/utils/convert";
+import "./loader.css";
 import { list } from "postcss";
-
-
+import { format, fromUnixTime } from 'date-fns';
+import WeatherIcon from "@/components/WeatherIcon";
+import WeatherDetails from "@/components/WeatherDetails";
+import { convertUnixToTime } from "@/utils/convertTime";
+import WeatherForecast from "@/components/WeatherForecast";
+import { filterUniqueDates } from "@/utils/spliceDays";
   //https://api.openweathermap.org/data/2.5/forecast?q=kairouan&APPID=54cefeff0f4c1f1c05e4d7f9d19aa55f&cnt=56
   interface WeatherData {
     cod: string;
@@ -72,14 +77,22 @@ import { list } from "postcss";
     sunrise: number;
     sunset: number;
   }
+
   export default function Home() {
     const { isLoading, error, data } = useQuery<WeatherData>('repoData', async() => {
-      const {data} = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=Kairouan&APPID=54cefeff0f4c1f1c05e4d7f9d19aa55f&cnt=56`)
+      const {data} = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=sousse&APPID=54cefeff0f4c1f1c05e4d7f9d19aa55f&cnt=56`)
       return data
     })
     console.log(data)
   
-  if (isLoading) return 'Loading...'
+  if (isLoading) return (
+    <div className="container">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+  )
   const CurrentDate = ({CityDate} : any)=>{
     const date =new Date(CityDate)
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -95,6 +108,8 @@ import { list } from "postcss";
 
 
   }
+    
+
     
 
   return (
@@ -119,22 +134,41 @@ import { list } from "postcss";
               </div>
               {/*weather & Time*/}
               <div className="flex gap-10 sm:gap-16 overflow-x-auto w-full justify-between pr-3">
-                {data?.list.map((item, index) => 
+                {data?.list.slice(0,7).map((item, index) => 
                 (
                   <div key={index} className="flex flex-col justify-between gap-2 items-center text-xs font-semibold">
-                    <p>
-                      {convert(item.main.temp)}
-                    </p>
+                    <p className="text-nowrap">{format(item.dt_txt,"h:mm a")}</p>
+                    <WeatherIcon icon={item.weather[0].icon} imageAlt={item.weather[0].description} />
+                    <p>{convert(item.main.temp ) ?? 0}°C</p>
                   </div>
-                ))}
-                
-
-                
+                ))}                
               </div>
+            </Container>
+          </div>
+          <div className="flex gap-4 ">
+            <Container className="w-fit justify-center flex-col px-4 items-center ">
+                <p>{data?.list[0].weather[0].main}</p>
+                <WeatherIcon  icon={data?.list[0].weather[0].icon ?? 0} imageAlt={data?.list[0].weather[0].description ?? ""} />
+            </Container>
+            <Container className="bg-yellow-300/80 px-6 gap-4 justify-between overflow-x-auto">
+              <WeatherDetails 
+              visibility={data?.list[0].visibility ?? 0} 
+              humidity={data?.list[0].main.humidity ?? 0}
+              wind_speed={data?.list[0].wind.speed ?? 0}
+              pressure={data?.list[0].main.pressure}
+              sunrise={format(fromUnixTime(data?.city.sunrise ?? 0), "h:mm a")}
+              sunset={format(fromUnixTime(data?.city.sunset ?? 0), "h:mm a")}
+                 />
             </Container>
           </div>
         </section>
         {/*7 days data*/}
+        
+        <section className="flex w-full flex-col gap-4 mt-4">
+        {filterUniqueDates(data?.list.slice(1) || []).map((item, index ) => (
+            <WeatherForecast key={index} visibility={item.visibility ?? 0} pressure={item.main.pressure} humidity={item.main.humidity} speed={item.wind.speed} sunset={data?.city.sunset} sunrise={data?.city.sunrise} temp_min={item.main.temp_min} temp_max={item.main.temp_max} feels_like={item.main.feels_like} icon={item.weather[0].icon} day={item.dt_txt} temp={item.main.temp} />
+        ))}
+        </section>
       </main>
     </div>
     );
