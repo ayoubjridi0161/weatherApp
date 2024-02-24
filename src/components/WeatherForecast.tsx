@@ -6,17 +6,17 @@ import { convert } from '@/utils/convert';
 import WeatherDetails from './WeatherDetails';
 type Props = {
     visibility: number;
-    pressure: string | number | undefined;
-    humidity: number | undefined;
-    speed: number | undefined;
-    sunset: number | undefined;
-    sunrise: number  | undefined;
-    temp_min: number  | undefined;
-    temp_max: number | undefined;
-    feels_like: number  | undefined;
-    icon: string | number;
-    day: string | number | undefined;
-    temp: number | undefined;
+    pressure: string | number  ;
+    humidity: number  ;
+    speed: number  ;
+    sunset: number  ;
+    sunrise: number  ;
+    temp_min: number  ;
+    temp_max: number  ;
+    feels_like: number  ;
+    icon: string | number;    
+    day: string | number | Date;
+    temp: number  ;
 }
 
 export default function WeatherForecast(props: Props) {
