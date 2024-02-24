@@ -10,7 +10,7 @@ type Props = {
     visibility: string | number ;
     humidity: string | number ;
     wind_speed: string | number ;
-    pressure: string | number ;
+    pressure: string | number | undefined ;
     sunrise: string | number ;
     sunset: string | number ;
   

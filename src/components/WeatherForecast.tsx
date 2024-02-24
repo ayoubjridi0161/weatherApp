@@ -9,8 +9,8 @@ type Props = {
     pressure: string | number  ;
     humidity: number  ;
     speed: number  ;
-    sunset: number  ;
-    sunrise: number  ;
+    sunset: number |undefined  ;
+    sunrise: number | undefined  ;
     temp_min: number  ;
     temp_max: number  ;
     feels_like: number  ;
