@@ -7,12 +7,12 @@ import { LuSunrise } from "react-icons/lu";
 import { LuSunset } from "react-icons/lu";
 type Props = {
   
-    visibility: string | number | undefined;
-    humidity: string | number | undefined;
-    wind_speed: string | number | undefined;
-    pressure: string | number | undefined;
-    sunrise: string | number | undefined;
-    sunset: string | number | undefined;
+    visibility: string | number ;
+    humidity: string | number ;
+    wind_speed: string | number ;
+    pressure: string | number ;
+    sunrise: string | number ;
+    sunset: string | number ;
   
 }
 
