@@ -81,10 +81,11 @@ import { useState } from "react";
 
   export default function Home() {
     const [city, setCity] = useState('kairouan')
+    const [intervalMs, setIntervalMs] = useState(1000)
     const { isLoading, error, data } = useQuery<WeatherData>('repoData', async() => {
       const {data} = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&APPID=54cefeff0f4c1f1c05e4d7f9d19aa55f&cnt=56`)
       return data
-    })
+    },{refetchInterval: intervalMs/*, refetchOnWindowFocus: false, refetchOnMount: false, refetchOnReconnect: false, refetchIntervalInBackground*/})
     console.log(data)
   if (error) return "error 404"
   if (isLoading) return (
