@@ -1,3 +1,9 @@
+interface Weather {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
+}
 interface WeatherEntry {
     dt: number;
     main: {
