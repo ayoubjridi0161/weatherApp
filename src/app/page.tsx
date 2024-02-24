@@ -13,6 +13,7 @@ import WeatherDetails from "@/components/WeatherDetails";
 import { convertUnixToTime } from "@/utils/convertTime";
 import WeatherForecast from "@/components/WeatherForecast";
 import { filterUniqueDates } from "@/utils/spliceDays";
+import { useState } from "react";
   //https://api.openweathermap.org/data/2.5/forecast?q=kairouan&APPID=54cefeff0f4c1f1c05e4d7f9d19aa55f&cnt=56
   interface WeatherData {
     cod: string;
@@ -79,12 +80,13 @@ import { filterUniqueDates } from "@/utils/spliceDays";
   }
 
   export default function Home() {
+    const [city, setCity] = useState('kairouan')
     const { isLoading, error, data } = useQuery<WeatherData>('repoData', async() => {
-      const {data} = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=sousse&APPID=54cefeff0f4c1f1c05e4d7f9d19aa55f&cnt=56`)
+      const {data} = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&APPID=54cefeff0f4c1f1c05e4d7f9d19aa55f&cnt=56`)
       return data
     })
     console.log(data)
-  
+  if (error) return "error 404"
   if (isLoading) return (
     <div className="container">
   <span></span>
@@ -108,13 +110,13 @@ import { filterUniqueDates } from "@/utils/spliceDays";
 
 
   }
-    
+  console.log(city)
 
     
 
   return (
     <div className="flex-col gap-4 flex bg-gray-100 min-h-screen">
-      <Navbar city={data?.city.name} />
+      <Navbar submitValue={(v)=>{setCity(v)}} city={data?.city.name} />
       <main className="px-3 max-w-7xl mx-auto flex flex-col w-full pb-10 pt-4">
         {/*today's data*/}
         <section className="space-y-4">
